@@ -2,7 +2,10 @@
 /**
  * Remove the extension's tables and options.
  *
- * @package MainWP_Auto_Updates_Status
+ * @package   MainWP_Auto_Updates_Status
+ * @author    ProAdmin <https://proadminwp.net/>
+ * @copyright Copyright (c) 2026 ProAdmin
+ * @license   GPL-2.0-or-later
  */
 
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {

@@ -1,5 +1,7 @@
 # MainWP Auto Updates Status Extension
 
+By [ProAdmin](https://proadminwp.net/)
+
 A MainWP Dashboard extension that adds an **Auto Updates** widget to the Operations page. It shows the status, schedule, live progress and run history of MainWP's built-in Advanced Automatic Updates.
 
 ![Widget views](docs/widget-views.png)
@@ -41,4 +43,6 @@ MainWP keeps only the latest run's results (in the `mainwp_updates_report_storag
 
 ## License
 
-GPLv2 or later.
+Copyright (c) 2026 [ProAdmin](https://proadminwp.net/).
+
+Released under the GNU General Public License v2 or later.

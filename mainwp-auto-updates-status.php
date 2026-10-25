@@ -11,8 +11,13 @@
  * Text Domain: mainwp-auto-updates-status
  * Domain Path: /languages
  * License:     GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Copyright:   (c) 2026 ProAdmin
  *
- * @package MainWP_Auto_Updates_Status
+ * @package   MainWP_Auto_Updates_Status
+ * @author    ProAdmin <https://proadminwp.net/>
+ * @copyright Copyright (c) 2026 ProAdmin
+ * @license   GPL-2.0-or-later
  */
 
 namespace ProAdmin\MainWP_AUS;

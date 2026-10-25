@@ -5,7 +5,10 @@
  * MainWP only keeps the results of the most recent run, so runs and their
  * per-item results are copied into two tables owned by this extension.
  *
- * @package MainWP_Auto_Updates_Status
+ * @package   MainWP_Auto_Updates_Status
+ * @author    ProAdmin <https://proadminwp.net/>
+ * @copyright Copyright (c) 2026 ProAdmin
+ * @license   GPL-2.0-or-later
  */
 
 namespace ProAdmin\MainWP_AUS;

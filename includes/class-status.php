@@ -2,7 +2,10 @@
 /**
  * Reads the current Advanced Automatic Updates state from MainWP.
  *
- * @package MainWP_Auto_Updates_Status
+ * @package   MainWP_Auto_Updates_Status
+ * @author    ProAdmin <https://proadminwp.net/>
+ * @copyright Copyright (c) 2026 ProAdmin
+ * @license   GPL-2.0-or-later
  */
 
 namespace ProAdmin\MainWP_AUS;

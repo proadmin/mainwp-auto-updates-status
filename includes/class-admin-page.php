@@ -2,7 +2,10 @@
 /**
  * Extension page: full run history, run details and settings.
  *
- * @package MainWP_Auto_Updates_Status
+ * @package   MainWP_Auto_Updates_Status
+ * @author    ProAdmin <https://proadminwp.net/>
+ * @copyright Copyright (c) 2026 ProAdmin
+ * @license   GPL-2.0-or-later
  */
 
 namespace ProAdmin\MainWP_AUS;
@@ -92,6 +95,14 @@ class Admin_Page {
 				$this->render_overview( $paged );
 			}
 			?>
+			<div class="ui hidden divider"></div>
+			<div class="mainwp-aus-branding ui tiny grey text">
+				<?php
+				/* translators: 1: version number, 2: current year */
+				echo esc_html( sprintf( __( 'MainWP Auto Updates Status Extension %1$s · © %2$s', 'mainwp-auto-updates-status' ), MAINWP_AUS_VERSION, '2026' ) );
+				?>
+				<a href="https://proadminwp.net/" target="_blank" rel="noopener">ProAdmin</a>
+			</div>
 		</div>
 		<?php
 		do_action( 'mainwp_pagefooter_extensions', MAINWP_AUS_FILE );

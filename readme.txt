@@ -1,8 +1,11 @@
 === MainWP Auto Updates Status Extension ===
+Contributors: proadmin
+Donate link: https://proadminwp.net/
 Requires at least: 6.2
 Requires PHP: 7.4
 Stable tag: 1.0.0
 License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Adds an Auto Updates widget to the MainWP Operations dashboard with the status, schedule, live progress and history of MainWP's Advanced Automatic Updates.
 
@@ -34,3 +37,8 @@ Tested with MainWP Dashboard 6.3.
 
 = 1.0.0 =
 * Initial release.
+
+== Copyright ==
+
+MainWP Auto Updates Status Extension is Copyright (c) 2026 ProAdmin (https://proadminwp.net/).
+Released under the GNU General Public License v2 or later.
