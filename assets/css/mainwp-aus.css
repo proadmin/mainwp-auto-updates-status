@@ -1,0 +1,45 @@
+#mainwp-aus-widget-body .mainwp-aus-cards {
+	margin-bottom: 0.5em;
+}
+
+#mainwp-aus-widget-body .mainwp-aus-cards .description .ui.small.text {
+	display: block;
+	margin-top: 0.25em;
+	opacity: 0.8;
+}
+
+.mainwp-aus-refresh {
+	display: inline-block;
+	margin-right: 0.75em;
+	color: inherit;
+}
+
+.mainwp-aus-progress.ui.progress {
+	margin: 0.5em 0 2.5em;
+}
+
+.mainwp-aus-progress.ui.progress .bar {
+	background-color: #2185d0;
+	min-width: 2em;
+}
+
+.mainwp-aus-definition.ui.table td {
+	padding-top: 0.4em;
+	padding-bottom: 0.4em;
+}
+
+.mainwp-aus-definition .ui.label {
+	margin-bottom: 0.25em;
+}
+
+.mainwp-aus-table .mainwp-aus-version {
+	white-space: nowrap;
+}
+
+.mainwp-aus-table .ui.tiny.text {
+	display: block;
+}
+
+.mainwp-aus-page .ui.mini.statistics {
+	margin: 1em 0;
+}
