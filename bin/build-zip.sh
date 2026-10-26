@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # MainWP Auto Updates Status Extension
-# Copyright (c) 2026 ProAdmin <https://proadminwp.net/>
+# Copyright (c) 2026 ProAdmin <https://proadmin.com>
 # Licensed under the GPL-2.0-or-later.
 #
 # Builds dist/mainwp-auto-updates-status.zip from the committed files,

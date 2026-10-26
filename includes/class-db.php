@@ -6,8 +6,8 @@
  * per-item results are copied into two tables owned by this extension.
  *
  * @package   MainWP_Auto_Updates_Status
- * @author    ProAdmin <https://proadminwp.net/>
- * @copyright Copyright (c) 2026 ProAdmin
+ * @author    ProAdmin <https://proadmin.com>
+ * @copyright Copyright (c) 2026 ProAdmin <https://proadmin.com>
  * @license   GPL-2.0-or-later
  */
 

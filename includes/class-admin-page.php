@@ -3,8 +3,8 @@
  * Extension page: full run history, run details and settings.
  *
  * @package   MainWP_Auto_Updates_Status
- * @author    ProAdmin <https://proadminwp.net/>
- * @copyright Copyright (c) 2026 ProAdmin
+ * @author    ProAdmin <https://proadmin.com>
+ * @copyright Copyright (c) 2026 ProAdmin <https://proadmin.com>
  * @license   GPL-2.0-or-later
  */
 
@@ -101,7 +101,7 @@ class Admin_Page {
 				/* translators: 1: version number, 2: current year */
 				echo esc_html( sprintf( __( 'MainWP Auto Updates Status Extension %1$s · © %2$s', 'mainwp-auto-updates-status' ), MAINWP_AUS_VERSION, '2026' ) );
 				?>
-				<a href="https://proadminwp.net/" target="_blank" rel="noopener">ProAdmin</a>
+				<a href="https://proadmin.com" target="_blank" rel="noopener">ProAdmin</a>
 			</div>
 		</div>
 		<?php

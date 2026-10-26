@@ -1,6 +1,6 @@
 === MainWP Auto Updates Status Extension ===
 Contributors: proadmin
-Donate link: https://proadminwp.net/
+Donate link: https://proadmin.com
 Requires at least: 6.2
 Requires PHP: 7.4
 Stable tag: 1.0.3
@@ -72,5 +72,5 @@ Tested with MainWP Dashboard 6.3.
 
 == Copyright ==
 
-MainWP Auto Updates Status Extension is Copyright (c) 2026 ProAdmin (https://proadminwp.net/).
+MainWP Auto Updates Status Extension is Copyright (c) 2026 ProAdmin (https://proadmin.com).
 Released under the GNU General Public License v2 or later.
