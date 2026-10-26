@@ -3,7 +3,7 @@ Contributors: proadmin
 Donate link: https://proadminwp.net/
 Requires at least: 6.2
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,9 @@ Tested with MainWP Dashboard 6.3.
 * mainwp_aus_run_finished (action, $run_start, $status) - fires when a run is recorded as finished.
 
 == Changelog ==
+
+= 1.0.2 =
+* Plugin site link now opens the GitHub repository; author link now opens proadmin.com.
 
 = 1.0.1 =
 * Security: all database queries now pass table names through $wpdb->prepare with %i placeholders.
