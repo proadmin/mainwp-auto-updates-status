@@ -3,7 +3,7 @@ Contributors: proadmin
 Donate link: https://proadminwp.net/
 Requires at least: 6.2
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,12 @@ MainWP keeps only the latest run's results (option mainwp_updates_report_storage
 
 Tested with MainWP Dashboard 6.3.
 
+== Known limitations ==
+
+* Live progress and each run's site count use the same per-site start time that MainWP's batch updates use. If a batch update is started while an automatic run is in progress, the progress bar drops and that run's site count is too low. A batch update also holds MainWP's cron, so the widget can show Overdue until it finishes.
+* On WordPress multisite, activation and uninstall only act on the current site.
+* If the extension is not loaded when MainWP finishes a run (for example, it was deactivated during the run), the run is closed the next time the widget or history page is viewed, without an end time or duration.
+
 == Hooks ==
 
 * mainwp_aus_capability (filter, string) - WordPress capability required to see the widget and history. Default manage_options.
@@ -41,6 +47,16 @@ Tested with MainWP Dashboard 6.3.
 * mainwp_aus_run_finished (action, $run_start, $status) - fires when a run is recorded as finished.
 
 == Changelog ==
+
+= 1.0.3 =
+* Fix: a run could stay "Running" forever if the extension missed the end of the run. Such runs are now closed automatically.
+* Fix: returning 0 from mainwp_aus_refresh_interval now turns off live refresh.
+* Fix: the import of MainWP's existing results now also runs on reactivation, and when MainWP is activated after this extension. Runs already recorded are not duplicated.
+* Fix: very long error messages could stop an update result from being saved. Errors are now capped at 2,000 characters, and names are shortened without breaking accented or non-Latin characters.
+* Fix: imported failures now show the run's time instead of the activation time.
+* Fix: the retention setting is capped before old runs are removed, and saving settings now uses the same access check as viewing the page.
+* Performance: the extension's options are now autoloaded, saving one database query per page load. The widget also runs fewer queries.
+* "Sites Changed" is renamed "Sites with Updates".
 
 = 1.0.2 =
 * Plugin site link now opens the GitHub repository; author link now opens proadmin.com.

@@ -3,7 +3,7 @@
  * Plugin Name: MainWP Auto Updates Status Extension
  * Plugin URI:  https://github.com/proadmin/mainwp-auto-updates-status
  * Description: Adds an Auto Updates widget to the MainWP Operations dashboard showing the status, schedule, live progress and run history of MainWP's Advanced Automatic Updates.
- * Version:     1.0.2
+ * Version:     1.0.3
  * Author:      ProAdmin
  * Author URI:  http://proadmin.com
  * Requires at least: 6.2
@@ -26,8 +26,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'MAINWP_AUS_VERSION', '1.0.2' );
-define( 'MAINWP_AUS_DB_VERSION', '1.0' );
+define( 'MAINWP_AUS_VERSION', '1.0.3' );
+define( 'MAINWP_AUS_DB_VERSION', '1.1' );
 define( 'MAINWP_AUS_FILE', __FILE__ );
 define( 'MAINWP_AUS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'MAINWP_AUS_URL', plugin_dir_url( __FILE__ ) );
@@ -92,6 +92,11 @@ class Plugin {
 
 		DB::instance()->maybe_upgrade();
 
+		// Import now if activation happened while MainWP was not active.
+		if ( ! get_option( 'mainwp_aus_imported' ) ) {
+			Recorder::instance()->import_existing();
+		}
+
 		// The recorder must run on cron requests too, since that is where auto updates happen.
 		Recorder::instance()->init();
 
@@ -131,7 +136,10 @@ class Plugin {
 	 */
 	public static function activate() {
 		DB::instance()->install();
-		Recorder::instance()->import_existing();
+		// Without MainWP there is nothing to import yet; init() imports once MainWP is active.
+		if ( class_exists( '\MainWP\Dashboard\MainWP_System' ) ) {
+			Recorder::instance()->import_existing();
+		}
 	}
 }
 

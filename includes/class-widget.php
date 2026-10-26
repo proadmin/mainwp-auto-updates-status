@@ -189,10 +189,11 @@ class Widget {
 	 * Render the refreshable part of the widget.
 	 */
 	public function render_body() {
-		$status = Status::get();
-		$latest = $this->latest_detailed_run();
-		$items  = $latest ? DB::instance()->get_items( $latest->run_start ) : array();
+		Status::close_stale_runs();
 		$runs   = DB::instance()->get_runs( 10 );
+		$status = Status::get( $runs );
+		$latest = $this->latest_detailed_run( $runs );
+		$items  = $latest ? DB::instance()->get_items( $latest->run_start ) : array();
 		$fails  = DB::instance()->get_recent_failures( 15 );
 
 		$site_ids = array_merge( wp_list_pluck( $items, 'site_id' ), wp_list_pluck( $fails, 'site_id' ) );
@@ -213,10 +214,11 @@ class Widget {
 	/**
 	 * Most recent run that has item details (or is still running).
 	 *
+	 * @param array $runs Newest runs.
 	 * @return object|null
 	 */
-	private function latest_detailed_run() {
-		foreach ( DB::instance()->get_runs( 5 ) as $run ) {
+	private function latest_detailed_run( $runs ) {
+		foreach ( $runs as $run ) {
 			if ( ! empty( $run->details_recorded ) ) {
 				return $run;
 			}

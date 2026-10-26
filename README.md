@@ -36,6 +36,12 @@ Run `bin/build-zip.sh` to create `dist/mainwp-auto-updates-status.zip`. The zip 
 
 MainWP keeps only the latest run's results (in the `mainwp_updates_report_storage` option) and clears them when the next run starts. The extension watches that option, and `mainwp_automatic_updates_is_running`, and copies each result into its own tables (`{prefix}mainwp_aus_runs` and `{prefix}mainwp_aus_items`) as soon as MainWP saves it. MainWP itself isn't modified. History builds up from the day the extension is activated.
 
+## Known limitations
+
+- Live progress and each run's site count use the same per-site start time that MainWP's batch updates use. If a batch update is started during an automatic run, the progress bar drops and that run's site count is too low. The widget can also show **Overdue** while a batch update holds MainWP's cron.
+- On WordPress multisite, activation and uninstall only act on the current site.
+- If the extension isn't loaded when MainWP finishes a run (for example, it was deactivated during the run), the run is closed the next time the widget or history page is viewed, without an end time or duration.
+
 ## Hooks
 
 | Hook | Type | Purpose |

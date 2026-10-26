@@ -38,7 +38,10 @@
 	function schedule() {
 		clearTimeout( timer );
 		var running = $( '#mainwp-aus-widget-body .mainwp-aus-body' ).data( 'running' ) === 1;
-		var interval = parseInt( mainwpAus.refreshInterval, 10 ) || 60;
+		var interval = parseInt( mainwpAus.refreshInterval, 10 );
+		if ( isNaN( interval ) ) {
+			interval = 60;
+		}
 		if ( running && interval > 0 ) {
 			timer = setTimeout( refresh, interval * 1000 );
 		}

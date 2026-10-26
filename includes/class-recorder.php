@@ -169,10 +169,11 @@ class Recorder {
 	/**
 	 * Insert items present in $new but not in $old.
 	 *
-	 * @param mixed $old Old storage value.
-	 * @param mixed $new New storage value.
+	 * @param mixed    $old      Old storage value.
+	 * @param mixed    $new      New storage value.
+	 * @param int|null $recorded Recorded timestamp for the items. Defaults to now.
 	 */
-	private function record_new_items( $old, $new ) {
+	private function record_new_items( $old, $new, $recorded = null ) {
 		if ( ! is_array( $new ) ) {
 			return;
 		}
@@ -185,7 +186,7 @@ class Recorder {
 			return;
 		}
 
-		$now     = Status::now();
+		$now     = null === $recorded ? Status::now() : (int) $recorded;
 		$created = false;
 
 		foreach ( self::TYPES as $key => $type ) {
@@ -237,15 +238,26 @@ class Recorder {
 		return array(
 			'site_id'     => (int) $raw['site_id'],
 			'item_type'   => $type,
-			'name'        => substr( sanitize_text_field( $name ), 0, 255 ),
-			'slug'        => isset( $raw['slug'] ) ? substr( sanitize_text_field( (string) $raw['slug'] ), 0, 255 ) : '',
-			'old_version' => isset( $raw['old_version'] ) ? substr( sanitize_text_field( (string) $raw['old_version'] ), 0, 64 ) : '',
-			'new_version' => isset( $raw['version'] ) ? substr( sanitize_text_field( (string) $raw['version'] ), 0, 64 ) : '',
+			'name'        => self::clip( sanitize_text_field( $name ), 255 ),
+			'slug'        => isset( $raw['slug'] ) ? self::clip( sanitize_text_field( (string) $raw['slug'] ), 255 ) : '',
+			'old_version' => isset( $raw['old_version'] ) ? self::clip( sanitize_text_field( (string) $raw['old_version'] ), 64 ) : '',
+			'new_version' => isset( $raw['version'] ) ? self::clip( sanitize_text_field( (string) $raw['version'] ), 64 ) : '',
 			'success'     => ! empty( $raw['success'] ),
 			'rolled_back' => ! empty( $raw['rollback'] ),
-			'error'       => sanitize_textarea_field( wp_strip_all_tags( $error ) ),
+			'error'       => self::clip( sanitize_textarea_field( wp_strip_all_tags( $error ) ), 2000 ),
 			'recorded'    => (int) $now,
 		);
+	}
+
+	/**
+	 * Shorten text to a number of characters without splitting a multibyte character.
+	 *
+	 * @param string $text   Text.
+	 * @param int    $length Max characters.
+	 * @return string
+	 */
+	public static function clip( $text, $length ) {
+		return mb_strlen( $text, 'UTF-8' ) > $length ? mb_substr( $text, 0, $length, 'UTF-8' ) : $text;
 	}
 
 	/**
@@ -254,6 +266,7 @@ class Recorder {
 	private function run_started() {
 		$run_start = $this->current_run_start();
 		if ( $run_start > 0 ) {
+			DB::instance()->close_stale_runs( $run_start );
 			DB::instance()->ensure_run( $run_start );
 		}
 	}
@@ -302,12 +315,10 @@ class Recorder {
 	/**
 	 * Import what MainWP already holds: the latest run's results and the
 	 * list of recent start times (start times only, no item details).
+	 *
+	 * Safe to repeat: runs already recorded are left alone.
 	 */
 	public function import_existing() {
-		if ( get_option( 'mainwp_aus_imported' ) ) {
-			return;
-		}
-
 		$now       = Status::now();
 		$run_start = $this->current_run_start();
 
@@ -318,7 +329,7 @@ class Recorder {
 				// MainWP stores these with gmdate() on a local timestamp, so read them back as UTC.
 				$ts = is_string( $started ) ? strtotime( $started . ' UTC' ) : false;
 				// The latest entry is logged a moment before the run's own start time; skip it.
-				if ( $ts && abs( $ts - $run_start ) > 120 ) {
+				if ( $ts && abs( $ts - $run_start ) > 120 && ! DB::instance()->run_exists_near( $ts ) ) {
 					DB::instance()->ensure_run( $ts, DB::STATUS_IMPORTED, false );
 				}
 			}
@@ -330,10 +341,13 @@ class Recorder {
 			DB::instance()->ensure_run( $run_start, $running ? DB::STATUS_RUNNING : DB::STATUS_IMPORTED );
 			DB::instance()->update_run( $run_start, array( 'details_recorded' => 1 ) );
 			if ( is_array( $storage ) && ! DB::instance()->run_has_items( $run_start ) ) {
-				$this->record_new_items( array(), $storage );
+				// Exact update times are not kept by MainWP, so use the run start.
+				$this->record_new_items( array(), $storage, $run_start );
 			}
 		}
 
-		update_option( 'mainwp_aus_imported', $now, false );
+		DB::instance()->prune( (int) get_option( 'mainwp_aus_retention_days', 90 ) );
+
+		update_option( 'mainwp_aus_imported', $now, true );
 	}
 }

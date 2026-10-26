@@ -117,19 +117,35 @@ class Status {
 	}
 
 	/**
+	 * Close recorded runs that MainWP is no longer running. A run whose finish
+	 * was missed would otherwise show as running forever.
+	 */
+	public static function close_stale_runs() {
+		$running = 1 === (int) get_option( 'mainwp_automatic_updates_is_running', 0 );
+		DB::instance()->close_stale_runs( $running ? (int) get_option( 'mainwp_automatic_updates_start_lasttime', 0 ) : 0 );
+	}
+
+	/**
 	 * Everything the widget needs in one array.
 	 *
+	 * @param array|null $runs Newest runs, if the caller already has them.
 	 * @return array
 	 */
-	public static function get() {
-		$now        = self::now();
-		$running    = 1 === (int) get_option( 'mainwp_automatic_updates_is_running', 0 );
-		$run_start  = (int) get_option( 'mainwp_automatic_updates_start_lasttime', 0 );
-		$next_run   = (int) get_option( 'mainwp_automatic_update_next_run_timestamp', 0 );
-		$enabled    = self::any_type_enabled();
-		$progress   = $running && $run_start ? DB::instance()->get_run_progress( $run_start ) : null;
+	public static function get( $runs = null ) {
+		$now       = self::now();
+		$running   = 1 === (int) get_option( 'mainwp_automatic_updates_is_running', 0 );
+		$run_start = (int) get_option( 'mainwp_automatic_updates_start_lasttime', 0 );
+		$next_run  = (int) get_option( 'mainwp_automatic_update_next_run_timestamp', 0 );
+		$enabled   = self::any_type_enabled();
+		$progress  = $running && $run_start ? DB::instance()->get_run_progress( $run_start ) : null;
+
+		if ( null === $runs ) {
+			self::close_stale_runs();
+			$runs = DB::instance()->get_runs( 10 );
+		}
+
 		$latest_run = null;
-		foreach ( DB::instance()->get_runs( 5 ) as $run ) {
+		foreach ( $runs as $run ) {
 			// The card shows the last finished run; a run in progress is covered by the Status card.
 			if ( DB::STATUS_RUNNING !== $run->status ) {
 				$latest_run = $run;

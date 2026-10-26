@@ -114,6 +114,7 @@ class Admin_Page {
 	 * @param int $paged Current page.
 	 */
 	private function render_overview( $paged ) {
+		Status::close_stale_runs();
 		$total = DB::instance()->count_runs();
 		$pages = max( 1, (int) ceil( $total / self::PER_PAGE ) );
 		$paged = min( $paged, $pages );
@@ -149,6 +150,7 @@ class Admin_Page {
 	 * @param int $run_start Run start.
 	 */
 	private function render_run( $run_start ) {
+		Status::close_stale_runs();
 		$run = DB::instance()->get_run( $run_start );
 		?>
 		<a href="<?php echo esc_url( self::url() ); ?>" class="ui mini basic button"><i class="arrow left icon"></i><?php esc_html_e( 'All runs', 'mainwp-auto-updates-status' ); ?></a>
@@ -171,7 +173,7 @@ class Admin_Page {
 		<div class="ui mini statistics">
 			<div class="statistic"><div class="value"><?php echo esc_html( (string) $run->updated ); ?></div><div class="label"><?php esc_html_e( 'Updated', 'mainwp-auto-updates-status' ); ?></div></div>
 			<div class="<?php echo $run->failed ? 'red ' : ''; ?>statistic"><div class="value"><?php echo esc_html( (string) $run->failed ); ?></div><div class="label"><?php esc_html_e( 'Failed', 'mainwp-auto-updates-status' ); ?></div></div>
-			<div class="statistic"><div class="value"><?php echo esc_html( (string) $run->sites_updated ); ?></div><div class="label"><?php esc_html_e( 'Sites Changed', 'mainwp-auto-updates-status' ); ?></div></div>
+			<div class="statistic"><div class="value"><?php echo esc_html( (string) $run->sites_updated ); ?></div><div class="label"><?php esc_html_e( 'Sites with Updates', 'mainwp-auto-updates-status' ); ?></div></div>
 			<div class="statistic"><div class="value"><?php echo esc_html( Status::duration( (int) $run->run_start, (int) $run->run_end ) ); ?></div><div class="label"><?php esc_html_e( 'Duration', 'mainwp-auto-updates-status' ); ?></div></div>
 		</div>
 		<div class="ui hidden divider"></div>
@@ -180,10 +182,20 @@ class Admin_Page {
 	}
 
 	/**
+	 * Whether the current user may change settings: they must be able to
+	 * see the history page and manage options.
+	 *
+	 * @return bool
+	 */
+	public static function can_manage() {
+		return Widget::can_view() && current_user_can( 'manage_options' );
+	}
+
+	/**
 	 * Settings form.
 	 */
 	private function render_settings() {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! self::can_manage() ) {
 			return;
 		}
 		$days = (int) get_option( 'mainwp_aus_retention_days', 90 );
@@ -208,12 +220,12 @@ class Admin_Page {
 	 * Save settings.
 	 */
 	public function save_settings() {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! self::can_manage() ) {
 			wp_die( esc_html__( 'You do not have permission to change these settings.', 'mainwp-auto-updates-status' ) );
 		}
 		check_admin_referer( 'mainwp_aus_save_settings' );
-		$days = isset( $_POST['mainwp_aus_retention_days'] ) ? absint( $_POST['mainwp_aus_retention_days'] ) : 90;
-		update_option( 'mainwp_aus_retention_days', min( 3650, $days ), false );
+		$days = isset( $_POST['mainwp_aus_retention_days'] ) ? min( 3650, absint( $_POST['mainwp_aus_retention_days'] ) ) : 90;
+		update_option( 'mainwp_aus_retention_days', $days, false );
 		DB::instance()->prune( $days );
 		wp_safe_redirect( add_query_arg( 'aus_saved', 1, self::url() ) );
 		exit;

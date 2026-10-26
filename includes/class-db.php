@@ -127,7 +127,16 @@ class DB {
 ) $charset_collate;"
 		);
 
-		update_option( 'mainwp_aus_db_version', MAINWP_AUS_DB_VERSION, false );
+		// Both options are read on every request, so they must be autoloaded.
+		// Earlier versions saved them with autoload off, and update_option() only changes that when the value changes.
+		foreach ( array( 'mainwp_aus_db_version', 'mainwp_aus_imported' ) as $option ) {
+			$value = get_option( $option );
+			if ( false !== $value ) {
+				delete_option( $option );
+				add_option( $option, $value, '', true );
+			}
+		}
+		update_option( 'mainwp_aus_db_version', MAINWP_AUS_DB_VERSION, true );
 	}
 
 	/**
@@ -145,6 +154,34 @@ class DB {
 		}
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query( $wpdb->prepare( 'INSERT IGNORE INTO %i (run_start, status, details_recorded) VALUES (%d, %s, %d)', $this->runs_table(), $run_start, $status, $details ? 1 : 0 ) );
+	}
+
+	/**
+	 * Whether a run was recorded within a few seconds of a start time.
+	 *
+	 * @param int $run_start Run start.
+	 * @param int $window    Seconds either side.
+	 * @return bool
+	 */
+	public function run_exists_near( $run_start, $window = 120 ) {
+		global $wpdb;
+		$run_start = (int) $run_start;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		return (bool) $wpdb->get_var( $wpdb->prepare( 'SELECT run_start FROM %i WHERE run_start BETWEEN %d AND %d LIMIT 1', $this->runs_table(), $run_start - (int) $window, $run_start + (int) $window ) );
+	}
+
+	/**
+	 * Close runs still marked as running that MainWP is no longer running.
+	 *
+	 * This happens when the extension was not loaded on the request where
+	 * MainWP finished the run. The end time is unknown, so run_end stays 0.
+	 *
+	 * @param int $keep_run_start Run MainWP reports as running now, or 0.
+	 */
+	public function close_stale_runs( $keep_run_start = 0 ) {
+		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->query( $wpdb->prepare( 'UPDATE %i SET status = %s WHERE status = %s AND run_start <> %d', $this->runs_table(), self::STATUS_COMPLETED, self::STATUS_RUNNING, (int) $keep_run_start ) );
 	}
 
 	/**
@@ -345,14 +382,5 @@ class DB {
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE run_start < %d', $this->items_table(), $cutoff ) );
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE run_start < %d', $this->runs_table(), $cutoff ) );
-	}
-
-	/**
-	 * Drop tables (uninstall).
-	 */
-	public function drop() {
-		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange
-		$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i, %i', $this->items_table(), $this->runs_table() ) );
 	}
 }
