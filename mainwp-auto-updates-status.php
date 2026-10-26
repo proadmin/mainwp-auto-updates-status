@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: MainWP Auto Updates Status Extension
- * Plugin URI:  https://proadminwp.net/
+ * Plugin URI:  https://github.com/proadmin/mainwp-auto-updates-status
  * Description: Adds an Auto Updates widget to the MainWP Operations dashboard showing the status, schedule, live progress and run history of MainWP's Advanced Automatic Updates.
  * Version:     1.0.1
  * Author:      ProAdmin
- * Author URI:  https://proadminwp.net/
+ * Author URI:  http://proadmin.com
  * Requires at least: 6.2
  * Requires PHP: 7.4
  * Text Domain: mainwp-auto-updates-status
