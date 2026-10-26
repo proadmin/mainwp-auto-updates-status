@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 #
-# MainWP Auto Updates Status Extension
+# Auto Updates Status for MainWP
 # Copyright (c) 2026 ProAdmin <https://proadmin.com>
 # Licensed under the GPL-2.0-or-later.
 #
-# Builds dist/mainwp-auto-updates-status.zip from the committed files,
+# Builds dist/auto-updates-status-for-mainwp.zip from the committed files,
 # including the user guide, installation guide and licence.
 
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-SLUG="mainwp-auto-updates-status"
+SLUG="auto-updates-status-for-mainwp"
 OUT="dist/${SLUG}.zip"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
@@ -20,7 +20,7 @@ mkdir -p dist "$TMP/$SLUG"
 
 # Plugin code, licence and guides; repository-only files stay out.
 git archive HEAD \
-	mainwp-auto-updates-status.php uninstall.php index.php readme.txt LICENSE.txt \
+	auto-updates-status-for-mainwp.php uninstall.php index.php readme.txt LICENSE.txt \
 	includes assets languages \
 	docs/user-guide.pdf docs/installation-guide.pdf \
 	| tar -x -C "$TMP/$SLUG"

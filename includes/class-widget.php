@@ -113,7 +113,7 @@ class Widget {
 		if ( ! is_array( $options ) ) {
 			$options = array();
 		}
-		$options[ 'advanced-' . self::WIDGET_ID ] = __( 'Auto Updates Status', 'mainwp-auto-updates-status' );
+		$options[ 'advanced-' . self::WIDGET_ID ] = __( 'Auto Updates Status', 'auto-updates-status-for-mainwp' );
 		return $options;
 	}
 
@@ -152,19 +152,19 @@ class Widget {
 			<div class="ui grid">
 				<div class="twelve wide column">
 					<h2 class="ui header handle-drag">
-						<?php echo esc_html( apply_filters( 'mainwp_aus_widget_title', __( 'Auto Updates', 'mainwp-auto-updates-status' ) ) ); ?>
-						<div class="sub header"><?php esc_html_e( 'Advanced Automatic Updates status and history', 'mainwp-auto-updates-status' ); ?></div>
+						<?php echo esc_html( apply_filters( 'mainwp_aus_widget_title', __( 'Auto Updates', 'auto-updates-status-for-mainwp' ) ) ); ?>
+						<div class="sub header"><?php esc_html_e( 'Advanced Automatic Updates status and history', 'auto-updates-status-for-mainwp' ); ?></div>
 					</h2>
 				</div>
 				<div class="four wide column right aligned">
-					<a href="#" class="mainwp-aus-refresh" data-tooltip="<?php esc_attr_e( 'Refresh', 'mainwp-auto-updates-status' ); ?>" data-position="left center" data-inverted=""><i class="redo alternate icon"></i></a>
+					<a href="#" class="mainwp-aus-refresh" data-tooltip="<?php esc_attr_e( 'Refresh', 'auto-updates-status-for-mainwp' ); ?>" data-position="left center" data-inverted=""><i class="redo alternate icon"></i></a>
 					<div id="mainwp-aus-dropdown" class="ui dropdown top right tiny pointing not-auto-init mainwp-dropdown-tab">
 						<i class="vertical ellipsis icon"></i>
 						<div class="menu">
-							<a class="item" data-tab="aus-status" data-value="aus-status" href="#"><?php esc_html_e( 'Status', 'mainwp-auto-updates-status' ); ?></a>
-							<a class="item" data-tab="aus-last-run" data-value="aus-last-run" href="#"><?php esc_html_e( 'Latest Run', 'mainwp-auto-updates-status' ); ?></a>
-							<a class="item" data-tab="aus-history" data-value="aus-history" href="#"><?php esc_html_e( 'Run History', 'mainwp-auto-updates-status' ); ?></a>
-							<a class="item" data-tab="aus-failures" data-value="aus-failures" href="#"><?php esc_html_e( 'Recent Failures', 'mainwp-auto-updates-status' ); ?></a>
+							<a class="item" data-tab="aus-status" data-value="aus-status" href="#"><?php esc_html_e( 'Status', 'auto-updates-status-for-mainwp' ); ?></a>
+							<a class="item" data-tab="aus-last-run" data-value="aus-last-run" href="#"><?php esc_html_e( 'Latest Run', 'auto-updates-status-for-mainwp' ); ?></a>
+							<a class="item" data-tab="aus-history" data-value="aus-history" href="#"><?php esc_html_e( 'Run History', 'auto-updates-status-for-mainwp' ); ?></a>
+							<a class="item" data-tab="aus-failures" data-value="aus-failures" href="#"><?php esc_html_e( 'Recent Failures', 'auto-updates-status-for-mainwp' ); ?></a>
 						</div>
 					</div>
 				</div>
@@ -175,11 +175,11 @@ class Widget {
 		</div>
 		<div class="ui two column grid mainwp-widget-footer">
 			<div class="left aligned middle aligned column">
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=Settings' ) ); ?>" class="ui mini basic button"><?php esc_html_e( 'Schedule Settings', 'mainwp-auto-updates-status' ); ?></a>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=PluginsAutoUpdate' ) ); ?>" class="ui mini basic button"><?php esc_html_e( 'Trusted Plugins', 'mainwp-auto-updates-status' ); ?></a>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=Settings' ) ); ?>" class="ui mini basic button"><?php esc_html_e( 'Schedule Settings', 'auto-updates-status-for-mainwp' ); ?></a>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=PluginsAutoUpdate' ) ); ?>" class="ui mini basic button"><?php esc_html_e( 'Trusted Plugins', 'auto-updates-status-for-mainwp' ); ?></a>
 			</div>
 			<div class="right aligned middle aligned column">
-				<a href="<?php echo esc_url( Admin_Page::url() ); ?>" class="ui mini green basic button"><?php esc_html_e( 'Full History', 'mainwp-auto-updates-status' ); ?></a>
+				<a href="<?php echo esc_url( Admin_Page::url() ); ?>" class="ui mini green basic button"><?php esc_html_e( 'Full History', 'auto-updates-status-for-mainwp' ); ?></a>
 			</div>
 		</div>
 		<?php
@@ -233,10 +233,10 @@ class Widget {
 	 */
 	private function render_cards( $status ) {
 		$states = array(
-			'running'   => array( __( 'Running', 'mainwp-auto-updates-status' ), 'sync alternate loading blue' ),
-			'scheduled' => array( __( 'Scheduled', 'mainwp-auto-updates-status' ), 'clock outline green' ),
-			'overdue'   => array( __( 'Overdue', 'mainwp-auto-updates-status' ), 'exclamation triangle orange' ),
-			'disabled'  => array( __( 'Disabled', 'mainwp-auto-updates-status' ), 'pause circle outline grey' ),
+			'running'   => array( __( 'Running', 'auto-updates-status-for-mainwp' ), 'sync alternate loading blue' ),
+			'scheduled' => array( __( 'Scheduled', 'auto-updates-status-for-mainwp' ), 'clock outline green' ),
+			'overdue'   => array( __( 'Overdue', 'auto-updates-status-for-mainwp' ), 'exclamation triangle orange' ),
+			'disabled'  => array( __( 'Disabled', 'auto-updates-status-for-mainwp' ), 'pause circle outline grey' ),
 		);
 		$state  = $states[ $status['state'] ];
 		$latest = $status['latest_run'];
@@ -246,12 +246,12 @@ class Widget {
 				<div class="content">
 					<div class="header"><span class="ui large text"><i class="<?php echo esc_attr( $state[1] ); ?> icon"></i> <?php echo esc_html( $state[0] ); ?></span></div>
 					<div class="description">
-						<strong><?php esc_html_e( 'Status', 'mainwp-auto-updates-status' ); ?></strong>
+						<strong><?php esc_html_e( 'Status', 'auto-updates-status-for-mainwp' ); ?></strong>
 						<?php if ( 'running' === $status['state'] && $status['progress'] && $status['progress']['total'] > 0 ) : ?>
 							<?php /* translators: 1: sites done, 2: sites total */ ?>
-							<div class="ui small text"><?php echo esc_html( sprintf( __( '%1$d of %2$d sites processed', 'mainwp-auto-updates-status' ), $status['progress']['done'], $status['progress']['total'] ) ); ?></div>
+							<div class="ui small text"><?php echo esc_html( sprintf( __( '%1$d of %2$d sites processed', 'auto-updates-status-for-mainwp' ), $status['progress']['done'], $status['progress']['total'] ) ); ?></div>
 						<?php elseif ( 'overdue' === $status['state'] ) : ?>
-							<div class="ui small text"><?php esc_html_e( 'Scheduled time passed without a run. Check that cron is running.', 'mainwp-auto-updates-status' ); ?></div>
+							<div class="ui small text"><?php esc_html_e( 'Scheduled time passed without a run. Check that cron is running.', 'auto-updates-status-for-mainwp' ); ?></div>
 						<?php endif; ?>
 					</div>
 				</div>
@@ -260,8 +260,8 @@ class Widget {
 				<div class="content">
 					<div class="header"><span class="ui large text"><i class="calendar alternate outline icon"></i> <?php echo esc_html( $status['next_run'] ? Status::relative( $status['next_run'] ) : '—' ); ?></span></div>
 					<div class="description">
-						<strong><?php esc_html_e( 'Next Run', 'mainwp-auto-updates-status' ); ?></strong>
-						<div class="ui small text"><?php echo esc_html( $status['next_run'] ? Status::format( $status['next_run'] ) : __( 'Not scheduled', 'mainwp-auto-updates-status' ) ); ?></div>
+						<strong><?php esc_html_e( 'Next Run', 'auto-updates-status-for-mainwp' ); ?></strong>
+						<div class="ui small text"><?php echo esc_html( $status['next_run'] ? Status::format( $status['next_run'] ) : __( 'Not scheduled', 'auto-updates-status-for-mainwp' ) ); ?></div>
 					</div>
 				</div>
 			</div>
@@ -271,16 +271,16 @@ class Widget {
 						<?php $badge = Status::run_badge( $latest ); ?>
 						<div class="header"><span class="ui large text"><i class="history icon"></i> <?php echo esc_html( Status::relative( $latest->run_start ) ); ?></span></div>
 						<div class="description">
-							<strong><?php esc_html_e( 'Last Run', 'mainwp-auto-updates-status' ); ?></strong>
+							<strong><?php esc_html_e( 'Last Run', 'auto-updates-status-for-mainwp' ); ?></strong>
 							<span class="ui mini <?php echo esc_attr( $badge[1] ); ?> label"><?php echo esc_html( $badge[0] ); ?></span>
 							<?php if ( ! empty( $latest->details_recorded ) ) : ?>
 								<?php /* translators: 1: updated count, 2: failed count */ ?>
-								<div class="ui small text"><?php echo esc_html( sprintf( __( '%1$d updated, %2$d failed', 'mainwp-auto-updates-status' ), $latest->updated, $latest->failed ) ); ?></div>
+								<div class="ui small text"><?php echo esc_html( sprintf( __( '%1$d updated, %2$d failed', 'auto-updates-status-for-mainwp' ), $latest->updated, $latest->failed ) ); ?></div>
 							<?php endif; ?>
 						</div>
 					<?php else : ?>
 						<div class="header"><span class="ui large text"><i class="history icon"></i> —</span></div>
-						<div class="description"><strong><?php esc_html_e( 'Last Run', 'mainwp-auto-updates-status' ); ?></strong><div class="ui small text"><?php esc_html_e( 'No runs recorded yet', 'mainwp-auto-updates-status' ); ?></div></div>
+						<div class="description"><strong><?php esc_html_e( 'Last Run', 'auto-updates-status-for-mainwp' ); ?></strong><div class="ui small text"><?php esc_html_e( 'No runs recorded yet', 'auto-updates-status-for-mainwp' ); ?></div></div>
 					<?php endif; ?>
 				</div>
 			</div>
@@ -295,10 +295,10 @@ class Widget {
 	 */
 	private function render_status_tab( $status ) {
 		$type_labels = array(
-			'core'        => __( 'WordPress Core', 'mainwp-auto-updates-status' ),
-			'plugin'      => __( 'Plugins', 'mainwp-auto-updates-status' ),
-			'theme'       => __( 'Themes', 'mainwp-auto-updates-status' ),
-			'translation' => __( 'Translations', 'mainwp-auto-updates-status' ),
+			'core'        => __( 'WordPress Core', 'auto-updates-status-for-mainwp' ),
+			'plugin'      => __( 'Plugins', 'auto-updates-status-for-mainwp' ),
+			'theme'       => __( 'Themes', 'auto-updates-status-for-mainwp' ),
+			'translation' => __( 'Translations', 'auto-updates-status-for-mainwp' ),
 		);
 		?>
 		<?php if ( 'running' === $status['state'] && $status['progress'] && $status['progress']['total'] > 0 ) : ?>
@@ -306,56 +306,56 @@ class Widget {
 			<div class="ui small progress mainwp-aus-progress" data-percent="<?php echo esc_attr( $pct ); ?>">
 				<div class="bar" style="width: <?php echo esc_attr( max( 2, $pct ) ); ?>%;"><div class="progress"><?php echo esc_html( $pct ); ?>%</div></div>
 				<?php /* translators: %s: start time */ ?>
-				<div class="label"><?php echo esc_html( sprintf( __( 'Run started %s', 'mainwp-auto-updates-status' ), Status::format( $status['run_start'] ) ) ); ?></div>
+				<div class="label"><?php echo esc_html( sprintf( __( 'Run started %s', 'auto-updates-status-for-mainwp' ), Status::format( $status['run_start'] ) ) ); ?></div>
 			</div>
 		<?php endif; ?>
 		<table class="ui very basic compact unstackable table mainwp-aus-definition">
 			<tbody>
 				<tr>
-					<td class="five wide"><strong><?php esc_html_e( 'Schedule', 'mainwp-auto-updates-status' ); ?></strong></td>
+					<td class="five wide"><strong><?php esc_html_e( 'Schedule', 'auto-updates-status-for-mainwp' ); ?></strong></td>
 					<td><?php echo esc_html( $status['schedule'] ); ?></td>
 				</tr>
 				<tr>
-					<td><strong><?php esc_html_e( 'Update delay', 'mainwp-auto-updates-status' ); ?></strong></td>
+					<td><strong><?php esc_html_e( 'Update delay', 'auto-updates-status-for-mainwp' ); ?></strong></td>
 					<td>
 						<?php
 						echo esc_html(
 							$status['delay_days'] > 0
 								/* translators: %d: number of days */
-								? sprintf( _n( '%d day after release', '%d days after release', $status['delay_days'], 'mainwp-auto-updates-status' ), $status['delay_days'] )
-								: __( 'No delay', 'mainwp-auto-updates-status' )
+								? sprintf( _n( '%d day after release', '%d days after release', $status['delay_days'], 'auto-updates-status-for-mainwp' ), $status['delay_days'] )
+								: __( 'No delay', 'auto-updates-status-for-mainwp' )
 						);
 						?>
 					</td>
 				</tr>
 				<tr>
-					<td><strong><?php esc_html_e( 'Update types', 'mainwp-auto-updates-status' ); ?></strong></td>
+					<td><strong><?php esc_html_e( 'Update types', 'auto-updates-status-for-mainwp' ); ?></strong></td>
 					<td>
 						<?php foreach ( $type_labels as $key => $label ) : ?>
-							<span class="ui mini <?php echo $status['types'][ $key ] ? 'green' : 'basic'; ?> label" data-tooltip="<?php echo esc_attr( $status['types'][ $key ] ? __( 'Install trusted updates', 'mainwp-auto-updates-status' ) : __( 'Disabled', 'mainwp-auto-updates-status' ) ); ?>" data-inverted=""><?php echo esc_html( $label ); ?></span>
+							<span class="ui mini <?php echo $status['types'][ $key ] ? 'green' : 'basic'; ?> label" data-tooltip="<?php echo esc_attr( $status['types'][ $key ] ? __( 'Install trusted updates', 'auto-updates-status-for-mainwp' ) : __( 'Disabled', 'auto-updates-status-for-mainwp' ) ); ?>" data-inverted=""><?php echo esc_html( $label ); ?></span>
 						<?php endforeach; ?>
 					</td>
 				</tr>
 				<?php if ( $status['trusted'] ) : ?>
 				<tr>
-					<td><strong><?php esc_html_e( 'Trusted items', 'mainwp-auto-updates-status' ); ?></strong></td>
+					<td><strong><?php esc_html_e( 'Trusted items', 'auto-updates-status-for-mainwp' ); ?></strong></td>
 					<td>
 						<?php
 						/* translators: 1: trusted plugins count, 2: trusted themes count */
-						echo esc_html( sprintf( __( '%1$d plugins, %2$d themes', 'mainwp-auto-updates-status' ), $status['trusted']['plugins'], $status['trusted']['themes'] ) );
+						echo esc_html( sprintf( __( '%1$d plugins, %2$d themes', 'auto-updates-status-for-mainwp' ), $status['trusted']['plugins'], $status['trusted']['themes'] ) );
 						?>
 					</td>
 				</tr>
 				<?php endif; ?>
 				<tr>
-					<td><strong><?php esc_html_e( 'Last started', 'mainwp-auto-updates-status' ); ?></strong></td>
+					<td><strong><?php esc_html_e( 'Last started', 'auto-updates-status-for-mainwp' ); ?></strong></td>
 					<td><?php echo esc_html( Status::format( $status['run_start'] ) ); ?></td>
 				</tr>
 			</tbody>
 		</table>
 		<?php if ( ! $status['enabled'] ) : ?>
 			<div class="ui small message">
-				<?php esc_html_e( 'Advanced Automatic Updates are disabled for core, plugins and themes. Enable them in MainWP Settings to start scheduled runs.', 'mainwp-auto-updates-status' ); ?>
+				<?php esc_html_e( 'Advanced Automatic Updates are disabled for core, plugins and themes. Enable them in MainWP Settings to start scheduled runs.', 'auto-updates-status-for-mainwp' ); ?>
 			</div>
 		<?php endif; ?>
 		<?php
@@ -370,18 +370,18 @@ class Widget {
 	 */
 	private function render_items_tab( $run, $items, $sites ) {
 		if ( ! $run ) {
-			echo '<div class="ui small message">' . esc_html__( 'No run details recorded yet. Details appear after the next automatic update run.', 'mainwp-auto-updates-status' ) . '</div>';
+			echo '<div class="ui small message">' . esc_html__( 'No run details recorded yet. Details appear after the next automatic update run.', 'auto-updates-status-for-mainwp' ) . '</div>';
 			return;
 		}
 		?>
 		<div class="ui small header">
 			<?php
 			/* translators: %s: run start time */
-			echo esc_html( sprintf( __( 'Run started %s', 'mainwp-auto-updates-status' ), Status::format( $run->run_start ) ) );
+			echo esc_html( sprintf( __( 'Run started %s', 'auto-updates-status-for-mainwp' ), Status::format( $run->run_start ) ) );
 			?>
 		</div>
 		<?php
-		self::render_items_table( $items, $sites, __( 'Nothing was updated in this run.', 'mainwp-auto-updates-status' ) );
+		self::render_items_table( $items, $sites, __( 'Nothing was updated in this run.', 'auto-updates-status-for-mainwp' ) );
 	}
 
 	/**
@@ -391,7 +391,7 @@ class Widget {
 	 * @param array $sites Sites lookup.
 	 */
 	private function render_failures_tab( $items, $sites ) {
-		self::render_items_table( $items, $sites, __( 'No failed automatic updates recorded.', 'mainwp-auto-updates-status' ), true );
+		self::render_items_table( $items, $sites, __( 'No failed automatic updates recorded.', 'auto-updates-status-for-mainwp' ), true );
 	}
 
 	/**
@@ -411,12 +411,12 @@ class Widget {
 		<table class="ui very compact unstackable small table mainwp-aus-table">
 			<thead>
 				<tr>
-					<th><?php esc_html_e( 'Site', 'mainwp-auto-updates-status' ); ?></th>
-					<th><?php esc_html_e( 'Item', 'mainwp-auto-updates-status' ); ?></th>
-					<th><?php esc_html_e( 'Version', 'mainwp-auto-updates-status' ); ?></th>
-					<th><?php esc_html_e( 'Result', 'mainwp-auto-updates-status' ); ?></th>
+					<th><?php esc_html_e( 'Site', 'auto-updates-status-for-mainwp' ); ?></th>
+					<th><?php esc_html_e( 'Item', 'auto-updates-status-for-mainwp' ); ?></th>
+					<th><?php esc_html_e( 'Version', 'auto-updates-status-for-mainwp' ); ?></th>
+					<th><?php esc_html_e( 'Result', 'auto-updates-status-for-mainwp' ); ?></th>
 					<?php if ( $show_date ) : ?>
-						<th><?php esc_html_e( 'When', 'mainwp-auto-updates-status' ); ?></th>
+						<th><?php esc_html_e( 'When', 'auto-updates-status-for-mainwp' ); ?></th>
 					<?php endif; ?>
 				</tr>
 			</thead>
@@ -429,7 +429,7 @@ class Widget {
 								<a href="<?php echo esc_url( admin_url( 'admin.php?page=managesites&dashboard=' . (int) $item->site_id ) ); ?>"><?php echo esc_html( stripslashes( $site->name ) ); ?></a>
 							<?php else : ?>
 								<?php /* translators: %d: site id */ ?>
-								<span class="ui grey text"><?php echo esc_html( sprintf( __( 'Deleted site #%d', 'mainwp-auto-updates-status' ), $item->site_id ) ); ?></span>
+								<span class="ui grey text"><?php echo esc_html( sprintf( __( 'Deleted site #%d', 'auto-updates-status-for-mainwp' ), $item->site_id ) ); ?></span>
 							<?php endif; ?>
 						</td>
 						<td>
@@ -445,11 +445,11 @@ class Widget {
 						</td>
 						<td>
 							<?php if ( $item->success ) : ?>
-								<span class="ui mini green label"><?php esc_html_e( 'Updated', 'mainwp-auto-updates-status' ); ?></span>
+								<span class="ui mini green label"><?php esc_html_e( 'Updated', 'auto-updates-status-for-mainwp' ); ?></span>
 							<?php elseif ( $item->rolled_back ) : ?>
-								<span class="ui mini orange label" data-tooltip="<?php echo esc_attr( $item->error ); ?>" data-inverted="" data-position="left center"><?php esc_html_e( 'Rolled back', 'mainwp-auto-updates-status' ); ?></span>
+								<span class="ui mini orange label" data-tooltip="<?php echo esc_attr( $item->error ); ?>" data-inverted="" data-position="left center"><?php esc_html_e( 'Rolled back', 'auto-updates-status-for-mainwp' ); ?></span>
 							<?php else : ?>
-								<span class="ui mini red label" <?php echo '' !== (string) $item->error ? 'data-tooltip="' . esc_attr( $item->error ) . '" data-inverted="" data-position="left center"' : ''; ?>><?php esc_html_e( 'Failed', 'mainwp-auto-updates-status' ); ?></span>
+								<span class="ui mini red label" <?php echo '' !== (string) $item->error ? 'data-tooltip="' . esc_attr( $item->error ) . '" data-inverted="" data-position="left center"' : ''; ?>><?php esc_html_e( 'Failed', 'auto-updates-status-for-mainwp' ); ?></span>
 							<?php endif; ?>
 						</td>
 						<?php if ( $show_date ) : ?>
@@ -470,21 +470,21 @@ class Widget {
 	 */
 	public static function render_runs_table( $runs, $compact = false ) {
 		if ( empty( $runs ) ) {
-			echo '<div class="ui small message">' . esc_html__( 'No runs recorded yet.', 'mainwp-auto-updates-status' ) . '</div>';
+			echo '<div class="ui small message">' . esc_html__( 'No runs recorded yet.', 'auto-updates-status-for-mainwp' ) . '</div>';
 			return;
 		}
 		?>
 		<table class="ui very compact unstackable small table mainwp-aus-table">
 			<thead>
 				<tr>
-					<th><?php esc_html_e( 'Started', 'mainwp-auto-updates-status' ); ?></th>
+					<th><?php esc_html_e( 'Started', 'auto-updates-status-for-mainwp' ); ?></th>
 					<?php if ( ! $compact ) : ?>
-						<th><?php esc_html_e( 'Duration', 'mainwp-auto-updates-status' ); ?></th>
-						<th><?php esc_html_e( 'Sites', 'mainwp-auto-updates-status' ); ?></th>
+						<th><?php esc_html_e( 'Duration', 'auto-updates-status-for-mainwp' ); ?></th>
+						<th><?php esc_html_e( 'Sites', 'auto-updates-status-for-mainwp' ); ?></th>
 					<?php endif; ?>
-					<th><?php esc_html_e( 'Updated', 'mainwp-auto-updates-status' ); ?></th>
-					<th><?php esc_html_e( 'Failed', 'mainwp-auto-updates-status' ); ?></th>
-					<th><?php esc_html_e( 'Result', 'mainwp-auto-updates-status' ); ?></th>
+					<th><?php esc_html_e( 'Updated', 'auto-updates-status-for-mainwp' ); ?></th>
+					<th><?php esc_html_e( 'Failed', 'auto-updates-status-for-mainwp' ); ?></th>
+					<th><?php esc_html_e( 'Result', 'auto-updates-status-for-mainwp' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -507,7 +507,7 @@ class Widget {
 								<?php
 								if ( $run->sites_total > 0 ) {
 									/* translators: 1: sites with updates, 2: sites in run */
-									echo esc_html( sprintf( __( '%1$d of %2$d', 'mainwp-auto-updates-status' ), $run->sites_updated, $run->sites_total ) );
+									echo esc_html( sprintf( __( '%1$d of %2$d', 'auto-updates-status-for-mainwp' ), $run->sites_updated, $run->sites_total ) );
 								} else {
 									echo esc_html( $details ? (string) $run->sites_updated : '—' );
 								}
@@ -530,7 +530,7 @@ class Widget {
 	public function ajax_refresh() {
 		check_ajax_referer( 'mainwp_aus_refresh', 'nonce' );
 		if ( ! self::can_view() ) {
-			wp_send_json_error( array( 'message' => __( 'You do not have permission to view this.', 'mainwp-auto-updates-status' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You do not have permission to view this.', 'auto-updates-status-for-mainwp' ) ), 403 );
 		}
 		ob_start();
 		$this->render_body();

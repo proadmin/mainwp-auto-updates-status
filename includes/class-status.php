@@ -73,26 +73,26 @@ class Status {
 
 		if ( 'weekly' === $frequency ) {
 			$days = array(
-				__( 'Monday', 'mainwp-auto-updates-status' ),
-				__( 'Tuesday', 'mainwp-auto-updates-status' ),
-				__( 'Wednesday', 'mainwp-auto-updates-status' ),
-				__( 'Thursday', 'mainwp-auto-updates-status' ),
-				__( 'Friday', 'mainwp-auto-updates-status' ),
-				__( 'Saturday', 'mainwp-auto-updates-status' ),
-				__( 'Sunday', 'mainwp-auto-updates-status' ),
+				__( 'Monday', 'auto-updates-status-for-mainwp' ),
+				__( 'Tuesday', 'auto-updates-status-for-mainwp' ),
+				__( 'Wednesday', 'auto-updates-status-for-mainwp' ),
+				__( 'Thursday', 'auto-updates-status-for-mainwp' ),
+				__( 'Friday', 'auto-updates-status-for-mainwp' ),
+				__( 'Saturday', 'auto-updates-status-for-mainwp' ),
+				__( 'Sunday', 'auto-updates-status-for-mainwp' ),
 			);
 			$day  = (int) get_option( 'mainwp_dayinweek_AutoUpdate', 0 );
 			/* translators: 1: weekday, 2: time */
-			return sprintf( __( 'Weekly on %1$s at %2$s', 'mainwp-auto-updates-status' ), isset( $days[ $day ] ) ? $days[ $day ] : $days[0], $time );
+			return sprintf( __( 'Weekly on %1$s at %2$s', 'auto-updates-status-for-mainwp' ), isset( $days[ $day ] ) ? $days[ $day ] : $days[0], $time );
 		}
 
 		if ( 'monthly' === $frequency ) {
 			/* translators: 1: day of month, 2: time */
-			return sprintf( __( 'Monthly on day %1$d at %2$s', 'mainwp-auto-updates-status' ), (int) get_option( 'mainwp_dayinmonth_AutoUpdate', 1 ), $time );
+			return sprintf( __( 'Monthly on day %1$d at %2$s', 'auto-updates-status-for-mainwp' ), (int) get_option( 'mainwp_dayinmonth_AutoUpdate', 1 ), $time );
 		}
 
 		/* translators: %s: time */
-		return sprintf( __( 'Daily at %s', 'mainwp-auto-updates-status' ), $time );
+		return sprintf( __( 'Daily at %s', 'auto-updates-status-for-mainwp' ), $time );
 	}
 
 	/**
@@ -205,7 +205,7 @@ class Status {
 		$now  = self::now();
 		$diff = human_time_diff( (int) $ts, $now );
 		/* translators: %s: human readable time difference */
-		return $ts > $now ? sprintf( __( 'in %s', 'mainwp-auto-updates-status' ), $diff ) : sprintf( __( '%s ago', 'mainwp-auto-updates-status' ), $diff );
+		return $ts > $now ? sprintf( __( 'in %s', 'auto-updates-status-for-mainwp' ), $diff ) : sprintf( __( '%s ago', 'auto-updates-status-for-mainwp' ), $diff );
 	}
 
 	/**
@@ -222,7 +222,7 @@ class Status {
 		$secs = $end - $start;
 		if ( $secs < MINUTE_IN_SECONDS ) {
 			/* translators: %d: seconds */
-			return sprintf( _n( '%d sec', '%d secs', $secs, 'mainwp-auto-updates-status' ), $secs );
+			return sprintf( _n( '%d sec', '%d secs', $secs, 'auto-updates-status-for-mainwp' ), $secs );
 		}
 		return human_time_diff( $start, $end );
 	}
@@ -235,10 +235,10 @@ class Status {
 	 */
 	public static function type_label( $type ) {
 		$labels = array(
-			'core'        => __( 'Core', 'mainwp-auto-updates-status' ),
-			'plugin'      => __( 'Plugin', 'mainwp-auto-updates-status' ),
-			'theme'       => __( 'Theme', 'mainwp-auto-updates-status' ),
-			'translation' => __( 'Translation', 'mainwp-auto-updates-status' ),
+			'core'        => __( 'Core', 'auto-updates-status-for-mainwp' ),
+			'plugin'      => __( 'Plugin', 'auto-updates-status-for-mainwp' ),
+			'theme'       => __( 'Theme', 'auto-updates-status-for-mainwp' ),
+			'translation' => __( 'Translation', 'auto-updates-status-for-mainwp' ),
 		);
 		return isset( $labels[ $type ] ) ? $labels[ $type ] : $type;
 	}
@@ -252,23 +252,23 @@ class Status {
 	public static function run_badge( $run ) {
 		switch ( $run->status ) {
 			case DB::STATUS_RUNNING:
-				return array( __( 'Running', 'mainwp-auto-updates-status' ), 'blue' );
+				return array( __( 'Running', 'auto-updates-status-for-mainwp' ), 'blue' );
 			case DB::STATUS_TIMED_OUT:
-				return array( __( 'Timed out', 'mainwp-auto-updates-status' ), 'orange' );
+				return array( __( 'Timed out', 'auto-updates-status-for-mainwp' ), 'orange' );
 			case DB::STATUS_STOPPED:
-				return array( __( 'Stopped', 'mainwp-auto-updates-status' ), 'grey' );
+				return array( __( 'Stopped', 'auto-updates-status-for-mainwp' ), 'grey' );
 			case DB::STATUS_IMPORTED:
 				if ( empty( $run->details_recorded ) ) {
-					return array( __( 'No details', 'mainwp-auto-updates-status' ), 'grey' );
+					return array( __( 'No details', 'auto-updates-status-for-mainwp' ), 'grey' );
 				}
 				break;
 		}
 		if ( $run->failed > 0 ) {
-			return array( __( 'Issues', 'mainwp-auto-updates-status' ), 'red' );
+			return array( __( 'Issues', 'auto-updates-status-for-mainwp' ), 'red' );
 		}
 		if ( 0 === (int) $run->updated ) {
-			return array( __( 'Nothing to update', 'mainwp-auto-updates-status' ), 'grey' );
+			return array( __( 'Nothing to update', 'auto-updates-status-for-mainwp' ), 'grey' );
 		}
-		return array( __( 'Success', 'mainwp-auto-updates-status' ), 'green' );
+		return array( __( 'Success', 'auto-updates-status-for-mainwp' ), 'green' );
 	}
 }

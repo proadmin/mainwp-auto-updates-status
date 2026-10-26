@@ -73,7 +73,7 @@ class Admin_Page {
 		do_action( 'mainwp_pageheader_extensions', MAINWP_AUS_FILE );
 
 		if ( ! Widget::can_view() ) {
-			echo '<div class="ui segment"><div class="ui message">' . esc_html__( 'You do not have permission to view auto update history.', 'mainwp-auto-updates-status' ) . '</div></div>';
+			echo '<div class="ui segment"><div class="ui message">' . esc_html__( 'You do not have permission to view auto update history.', 'auto-updates-status-for-mainwp' ) . '</div></div>';
 			do_action( 'mainwp_pagefooter_extensions', MAINWP_AUS_FILE );
 			return;
 		}
@@ -86,7 +86,7 @@ class Admin_Page {
 		?>
 		<div class="ui segment mainwp-aus-page">
 			<?php if ( $saved ) : ?>
-				<div class="ui green message"><?php esc_html_e( 'Settings saved.', 'mainwp-auto-updates-status' ); ?></div>
+				<div class="ui green message"><?php esc_html_e( 'Settings saved.', 'auto-updates-status-for-mainwp' ); ?></div>
 			<?php endif; ?>
 			<?php
 			if ( $run_start ) {
@@ -99,7 +99,7 @@ class Admin_Page {
 			<div class="mainwp-aus-branding ui tiny grey text">
 				<?php
 				/* translators: 1: version number, 2: current year */
-				echo esc_html( sprintf( __( 'MainWP Auto Updates Status Extension %1$s · © %2$s', 'mainwp-auto-updates-status' ), MAINWP_AUS_VERSION, '2026' ) );
+				echo esc_html( sprintf( __( 'Auto Updates Status for MainWP %1$s · © %2$s', 'auto-updates-status-for-mainwp' ), MAINWP_AUS_VERSION, '2026' ) );
 				?>
 				<a href="https://proadmin.com" target="_blank" rel="noopener">ProAdmin</a>
 			</div>
@@ -123,8 +123,8 @@ class Admin_Page {
 		$sites = DB::instance()->get_sites( wp_list_pluck( $fails, 'site_id' ) );
 		?>
 		<h2 class="ui header">
-			<?php esc_html_e( 'Auto Update Run History', 'mainwp-auto-updates-status' ); ?>
-			<div class="sub header"><?php esc_html_e( 'Every Advanced Automatic Updates run recorded on this Dashboard. Select a run to see each update.', 'mainwp-auto-updates-status' ); ?></div>
+			<?php esc_html_e( 'Auto Update Run History', 'auto-updates-status-for-mainwp' ); ?>
+			<div class="sub header"><?php esc_html_e( 'Every Advanced Automatic Updates run recorded on this Dashboard. Select a run to see each update.', 'auto-updates-status-for-mainwp' ); ?></div>
 		</h2>
 		<?php Widget::render_runs_table( $runs ); ?>
 		<?php if ( $pages > 1 ) : ?>
@@ -136,8 +136,8 @@ class Admin_Page {
 		<?php endif; ?>
 
 		<div class="ui hidden divider"></div>
-		<h3 class="ui header"><?php esc_html_e( 'Recent Failures', 'mainwp-auto-updates-status' ); ?></h3>
-		<?php Widget::render_items_table( $fails, $sites, __( 'No failed automatic updates recorded.', 'mainwp-auto-updates-status' ), true ); ?>
+		<h3 class="ui header"><?php esc_html_e( 'Recent Failures', 'auto-updates-status-for-mainwp' ); ?></h3>
+		<?php Widget::render_items_table( $fails, $sites, __( 'No failed automatic updates recorded.', 'auto-updates-status-for-mainwp' ), true ); ?>
 
 		<div class="ui hidden divider"></div>
 		<?php $this->render_settings(); ?>
@@ -153,10 +153,10 @@ class Admin_Page {
 		Status::close_stale_runs();
 		$run = DB::instance()->get_run( $run_start );
 		?>
-		<a href="<?php echo esc_url( self::url() ); ?>" class="ui mini basic button"><i class="arrow left icon"></i><?php esc_html_e( 'All runs', 'mainwp-auto-updates-status' ); ?></a>
+		<a href="<?php echo esc_url( self::url() ); ?>" class="ui mini basic button"><i class="arrow left icon"></i><?php esc_html_e( 'All runs', 'auto-updates-status-for-mainwp' ); ?></a>
 		<?php
 		if ( ! $run ) {
-			echo '<div class="ui message">' . esc_html__( 'That run was not found. It may have been removed by the retention setting.', 'mainwp-auto-updates-status' ) . '</div>';
+			echo '<div class="ui message">' . esc_html__( 'That run was not found. It may have been removed by the retention setting.', 'auto-updates-status-for-mainwp' ) . '</div>';
 			return;
 		}
 		$items = DB::instance()->get_items( $run_start );
@@ -166,19 +166,19 @@ class Admin_Page {
 		<h2 class="ui header">
 			<?php
 			/* translators: %s: run start time */
-			echo esc_html( sprintf( __( 'Run started %s', 'mainwp-auto-updates-status' ), Status::format( $run->run_start ) ) );
+			echo esc_html( sprintf( __( 'Run started %s', 'auto-updates-status-for-mainwp' ), Status::format( $run->run_start ) ) );
 			?>
 			<span class="ui small <?php echo esc_attr( $badge[1] ); ?> label"><?php echo esc_html( $badge[0] ); ?></span>
 		</h2>
 		<div class="ui mini statistics">
-			<div class="statistic"><div class="value"><?php echo esc_html( (string) $run->updated ); ?></div><div class="label"><?php esc_html_e( 'Updated', 'mainwp-auto-updates-status' ); ?></div></div>
-			<div class="<?php echo $run->failed ? 'red ' : ''; ?>statistic"><div class="value"><?php echo esc_html( (string) $run->failed ); ?></div><div class="label"><?php esc_html_e( 'Failed', 'mainwp-auto-updates-status' ); ?></div></div>
-			<div class="statistic"><div class="value"><?php echo esc_html( (string) $run->sites_updated ); ?></div><div class="label"><?php esc_html_e( 'Sites with Updates', 'mainwp-auto-updates-status' ); ?></div></div>
-			<div class="statistic"><div class="value"><?php echo esc_html( Status::duration( (int) $run->run_start, (int) $run->run_end ) ); ?></div><div class="label"><?php esc_html_e( 'Duration', 'mainwp-auto-updates-status' ); ?></div></div>
+			<div class="statistic"><div class="value"><?php echo esc_html( (string) $run->updated ); ?></div><div class="label"><?php esc_html_e( 'Updated', 'auto-updates-status-for-mainwp' ); ?></div></div>
+			<div class="<?php echo $run->failed ? 'red ' : ''; ?>statistic"><div class="value"><?php echo esc_html( (string) $run->failed ); ?></div><div class="label"><?php esc_html_e( 'Failed', 'auto-updates-status-for-mainwp' ); ?></div></div>
+			<div class="statistic"><div class="value"><?php echo esc_html( (string) $run->sites_updated ); ?></div><div class="label"><?php esc_html_e( 'Sites with Updates', 'auto-updates-status-for-mainwp' ); ?></div></div>
+			<div class="statistic"><div class="value"><?php echo esc_html( Status::duration( (int) $run->run_start, (int) $run->run_end ) ); ?></div><div class="label"><?php esc_html_e( 'Duration', 'auto-updates-status-for-mainwp' ); ?></div></div>
 		</div>
 		<div class="ui hidden divider"></div>
 		<?php
-		Widget::render_items_table( $items, $sites, __( 'Nothing was updated in this run.', 'mainwp-auto-updates-status' ) );
+		Widget::render_items_table( $items, $sites, __( 'Nothing was updated in this run.', 'auto-updates-status-for-mainwp' ) );
 	}
 
 	/**
@@ -200,18 +200,18 @@ class Admin_Page {
 		}
 		$days = (int) get_option( 'mainwp_aus_retention_days', 90 );
 		?>
-		<h3 class="ui header"><?php esc_html_e( 'Settings', 'mainwp-auto-updates-status' ); ?></h3>
+		<h3 class="ui header"><?php esc_html_e( 'Settings', 'auto-updates-status-for-mainwp' ); ?></h3>
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="ui form">
 			<input type="hidden" name="action" value="mainwp_aus_save_settings">
 			<?php wp_nonce_field( 'mainwp_aus_save_settings' ); ?>
 			<div class="ui grid field">
-				<label class="six wide column middle aligned" for="mainwp_aus_retention_days"><?php esc_html_e( 'Keep history for (days)', 'mainwp-auto-updates-status' ); ?></label>
+				<label class="six wide column middle aligned" for="mainwp_aus_retention_days"><?php esc_html_e( 'Keep history for (days)', 'auto-updates-status-for-mainwp' ); ?></label>
 				<div class="ten wide column">
 					<input type="number" min="0" max="3650" id="mainwp_aus_retention_days" name="mainwp_aus_retention_days" value="<?php echo esc_attr( (string) $days ); ?>">
-					<div class="ui tiny grey text"><?php esc_html_e( '0 keeps history forever. Older runs are removed after each run finishes.', 'mainwp-auto-updates-status' ); ?></div>
+					<div class="ui tiny grey text"><?php esc_html_e( '0 keeps history forever. Older runs are removed after each run finishes.', 'auto-updates-status-for-mainwp' ); ?></div>
 				</div>
 			</div>
-			<button type="submit" class="ui green button"><?php esc_html_e( 'Save Settings', 'mainwp-auto-updates-status' ); ?></button>
+			<button type="submit" class="ui green button"><?php esc_html_e( 'Save Settings', 'auto-updates-status-for-mainwp' ); ?></button>
 		</form>
 		<?php
 	}
@@ -221,7 +221,7 @@ class Admin_Page {
 	 */
 	public function save_settings() {
 		if ( ! self::can_manage() ) {
-			wp_die( esc_html__( 'You do not have permission to change these settings.', 'mainwp-auto-updates-status' ) );
+			wp_die( esc_html__( 'You do not have permission to change these settings.', 'auto-updates-status-for-mainwp' ) );
 		}
 		check_admin_referer( 'mainwp_aus_save_settings' );
 		$days = isset( $_POST['mainwp_aus_retention_days'] ) ? min( 3650, absint( $_POST['mainwp_aus_retention_days'] ) ) : 90;

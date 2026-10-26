@@ -1,13 +1,14 @@
-=== MainWP Auto Updates Status Extension ===
+=== Auto Updates Status for MainWP ===
 Contributors: proadmin
-Donate link: https://proadmin.com
+Tags: mainwp, auto updates, automatic updates, dashboard widget, update history
 Requires at least: 6.2
 Requires PHP: 7.4
-Stable tag: 1.0.3
+Tested up to: 7.1.3
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Adds an Auto Updates widget to the MainWP Operations dashboard with the status, schedule, live progress and history of MainWP's Advanced Automatic Updates.
+Shows the status, schedule, live progress and history of MainWP's Advanced Automatic Updates in a widget on the MainWP Operations page.
 
 == Description ==
 
@@ -18,7 +19,7 @@ Widget (MainWP > Operations), four views from the widget menu:
 * Run History: the last 10 runs with updated and failed counts.
 * Recent Failures: failed updates across all runs.
 
-The extension page (Add-ons > MainWP Auto Updates Status Extension) shows the full paginated run history, per-run details, and a history retention setting (default 90 days).
+The extension page (Add-ons > Auto Updates Status for MainWP) shows the full paginated run history, per-run details, and a history retention setting (default 90 days).
 
 == Documentation ==
 
@@ -48,6 +49,12 @@ Tested with MainWP Dashboard 6.3.
 
 == Changelog ==
 
+= 1.1.0 =
+* Renamed from "MainWP Auto Updates Status Extension" to "Auto Updates Status for MainWP" to meet the WordPress.org plugin naming guidelines. The plugin folder and text domain are now auto-updates-status-for-mainwp.
+* The plugin now declares MainWP Dashboard as a required plugin (WordPress 6.5+).
+* Removed the load_plugin_textdomain() call; WordPress loads translations automatically.
+* Readme: added tags, shortened the summary and removed the donate link.
+
 = 1.0.3 =
 * Fix: a run could stay "Running" forever if the extension missed the end of the run. Such runs are now closed automatically.
 * Fix: returning 0 from mainwp_aus_refresh_interval now turns off live refresh.
@@ -70,7 +77,12 @@ Tested with MainWP Dashboard 6.3.
 = 1.0.0 =
 * Initial release.
 
+== Upgrade Notice ==
+
+= 1.1.0 =
+The plugin folder has a new name. To keep your history, deactivate the old "MainWP Auto Updates Status Extension" and remove its folder (wp-content/plugins/mainwp-auto-updates-status) by FTP or your host's file manager. Do not use Delete on the Plugins page, because that erases the history. Then install and activate this version.
+
 == Copyright ==
 
-MainWP Auto Updates Status Extension is Copyright (c) 2026 ProAdmin (https://proadmin.com).
+Auto Updates Status for MainWP is Copyright (c) 2026 ProAdmin (https://proadmin.com).
 Released under the GNU General Public License v2 or later.
