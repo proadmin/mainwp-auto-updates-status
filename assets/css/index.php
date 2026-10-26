@@ -6,4 +6,6 @@
  * Licensed under the GPL-2.0-or-later.
  *
  * Silence is golden.
+ *
+ * @package MainWP_Auto_Updates_Status
  */

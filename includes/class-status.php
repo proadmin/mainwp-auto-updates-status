@@ -165,17 +165,17 @@ class Status {
 		}
 
 		return array(
-			'now'         => $now,
-			'state'       => $state,
-			'enabled'     => $enabled,
-			'types'       => self::enabled_types(),
-			'schedule'    => self::schedule_label(),
-			'delay_days'  => (int) get_option( 'mainwp_delay_autoupdate', 1 ),
-			'next_run'    => $enabled ? $next_run : 0,
-			'run_start'   => $run_start,
-			'progress'    => $progress,
-			'latest_run'  => $latest_run,
-			'trusted'     => self::trusted_counts(),
+			'now'        => $now,
+			'state'      => $state,
+			'enabled'    => $enabled,
+			'types'      => self::enabled_types(),
+			'schedule'   => self::schedule_label(),
+			'delay_days' => (int) get_option( 'mainwp_delay_autoupdate', 1 ),
+			'next_run'   => $enabled ? $next_run : 0,
+			'run_start'  => $run_start,
+			'progress'   => $progress,
+			'latest_run' => $latest_run,
+			'trusted'    => self::trusted_counts(),
 		);
 	}
 
