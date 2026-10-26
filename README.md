@@ -40,7 +40,8 @@ MainWP keeps only the latest run's results (in the `mainwp_updates_report_storag
 
 | Hook | Type | Purpose |
 | --- | --- | --- |
-| `mainwp_aus_can_view` | filter (bool) | Who can see the widget and history |
+| `mainwp_aus_capability` | filter (string) | WordPress capability required to see the widget and history (default `manage_options`) |
+| `mainwp_aus_can_view` | filter (bool) | Final yes/no on who can see the widget and history |
 | `mainwp_aus_refresh_interval` | filter (int seconds, 0 disables) | Live refresh while a run is in progress |
 | `mainwp_aus_widget_title` | filter (string) | Widget title |
 | `mainwp_aus_run_finished` | action (`$run_start`, `$status`) | Fires when a run is recorded as finished |

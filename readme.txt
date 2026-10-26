@@ -34,7 +34,8 @@ Tested with MainWP Dashboard 6.3.
 
 == Hooks ==
 
-* mainwp_aus_can_view (filter, bool) - who can see the widget and history.
+* mainwp_aus_capability (filter, string) - WordPress capability required to see the widget and history. Default manage_options.
+* mainwp_aus_can_view (filter, bool) - final yes/no on who can see the widget and history.
 * mainwp_aus_refresh_interval (filter, int seconds, 0 disables) - live refresh while running.
 * mainwp_aus_widget_title (filter, string).
 * mainwp_aus_run_finished (action, $run_start, $status) - fires when a run is recorded as finished.

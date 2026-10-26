@@ -143,8 +143,8 @@ class DB {
 		if ( $run_start <= 0 ) {
 			return;
 		}
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$wpdb->query( $wpdb->prepare( 'INSERT IGNORE INTO ' . $this->runs_table() . ' (run_start, status, details_recorded) VALUES (%d, %s, %d)', $run_start, $status, $details ? 1 : 0 ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->query( $wpdb->prepare( 'INSERT IGNORE INTO %i (run_start, status, details_recorded) VALUES (%d, %s, %d)', $this->runs_table(), $run_start, $status, $details ? 1 : 0 ) );
 	}
 
 	/**
@@ -196,8 +196,8 @@ class DB {
 	 */
 	public function run_has_items( $run_start ) {
 		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		return (bool) $wpdb->get_var( $wpdb->prepare( 'SELECT id FROM ' . $this->items_table() . ' WHERE run_start = %d LIMIT 1', (int) $run_start ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		return (bool) $wpdb->get_var( $wpdb->prepare( 'SELECT id FROM %i WHERE run_start = %d LIMIT 1', $this->items_table(), (int) $run_start ) );
 	}
 
 	/**
@@ -208,8 +208,8 @@ class DB {
 	 */
 	public function get_run( $run_start ) {
 		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$run = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $this->runs_table() . ' WHERE run_start = %d', (int) $run_start ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$run = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE run_start = %d', $this->runs_table(), (int) $run_start ) );
 		return $run ? $this->add_run_counts( array( $run ) )[0] : null;
 	}
 
@@ -222,8 +222,8 @@ class DB {
 	 */
 	public function get_runs( $limit = 10, $offset = 0 ) {
 		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$runs = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $this->runs_table() . ' ORDER BY run_start DESC LIMIT %d OFFSET %d', (int) $limit, (int) $offset ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$runs = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i ORDER BY run_start DESC LIMIT %d OFFSET %d', $this->runs_table(), (int) $limit, (int) $offset ) );
 		return $this->add_run_counts( is_array( $runs ) ? $runs : array() );
 	}
 
@@ -234,8 +234,8 @@ class DB {
 	 */
 	public function count_runs() {
 		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		return (int) $wpdb->get_var( 'SELECT COUNT(*) FROM ' . $this->runs_table() );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		return (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i', $this->runs_table() ) );
 	}
 
 	/**
@@ -251,8 +251,8 @@ class DB {
 		}
 		$starts       = array_map( 'intval', wp_list_pluck( $runs, 'run_start' ) );
 		$placeholders = implode( ',', array_fill( 0, count( $starts ), '%d' ) );
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
-		$rows = $wpdb->get_results( $wpdb->prepare( 'SELECT run_start, SUM(success = 1) AS updated, SUM(success = 0) AS failed, SUM(rolled_back = 1) AS rolled_back, COUNT(DISTINCT site_id) AS sites_updated FROM ' . $this->items_table() . " WHERE run_start IN ($placeholders) GROUP BY run_start", $starts ), OBJECT_K );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- $placeholders is only a list of %d placeholders.
+		$rows = $wpdb->get_results( $wpdb->prepare( "SELECT run_start, SUM(success = 1) AS updated, SUM(success = 0) AS failed, SUM(rolled_back = 1) AS rolled_back, COUNT(DISTINCT site_id) AS sites_updated FROM %i WHERE run_start IN ($placeholders) GROUP BY run_start", array_merge( array( $this->items_table() ), $starts ) ), OBJECT_K );
 		foreach ( $runs as $run ) {
 			$counts             = isset( $rows[ $run->run_start ] ) ? $rows[ $run->run_start ] : null;
 			$run->updated       = $counts ? (int) $counts->updated : 0;
@@ -272,9 +272,13 @@ class DB {
 	 */
 	public function get_items( $run_start, $failed_only = false ) {
 		global $wpdb;
-		$where = $failed_only ? ' AND success = 0' : '';
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$items = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $this->items_table() . ' WHERE run_start = %d' . $where . ' ORDER BY success ASC, site_id ASC, item_type ASC, name ASC', (int) $run_start ) );
+		if ( $failed_only ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+			$items = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE run_start = %d AND success = 0 ORDER BY site_id ASC, item_type ASC, name ASC', $this->items_table(), (int) $run_start ) );
+		} else {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+			$items = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE run_start = %d ORDER BY success ASC, site_id ASC, item_type ASC, name ASC', $this->items_table(), (int) $run_start ) );
+		}
 		return is_array( $items ) ? $items : array();
 	}
 
@@ -286,8 +290,8 @@ class DB {
 	 */
 	public function get_recent_failures( $limit = 20 ) {
 		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$items = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $this->items_table() . ' WHERE success = 0 ORDER BY recorded DESC, id DESC LIMIT %d', (int) $limit ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$items = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE success = 0 ORDER BY recorded DESC, id DESC LIMIT %d', $this->items_table(), (int) $limit ) );
 		return is_array( $items ) ? $items : array();
 	}
 
@@ -299,9 +303,8 @@ class DB {
 	 */
 	public function get_run_progress( $run_start ) {
 		global $wpdb;
-		$sql = 'SELECT COUNT(*) AS total, SUM(s.dtsAutomaticSync >= s.dtsAutomaticSyncStart) AS done FROM ' . $this->mainwp_table( 'wp_sync' ) . ' s JOIN ' . $this->mainwp_table( 'wp' ) . ' w ON w.id = s.wpid WHERE w.suspended = 0 AND s.dtsAutomaticSyncStart = %d';
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared
-		$row = $wpdb->get_row( $wpdb->prepare( $sql, (int) $run_start ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$row = $wpdb->get_row( $wpdb->prepare( 'SELECT COUNT(*) AS total, SUM(s.dtsAutomaticSync >= s.dtsAutomaticSyncStart) AS done FROM %i s JOIN %i w ON w.id = s.wpid WHERE w.suspended = 0 AND s.dtsAutomaticSyncStart = %d', $this->mainwp_table( 'wp_sync' ), $this->mainwp_table( 'wp' ), (int) $run_start ) );
 		return array(
 			'total' => $row ? (int) $row->total : 0,
 			'done'  => $row ? (int) $row->done : 0,
@@ -321,8 +324,8 @@ class DB {
 			return array();
 		}
 		$placeholders = implode( ',', array_fill( 0, count( $site_ids ), '%d' ) );
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
-		$rows = $wpdb->get_results( $wpdb->prepare( 'SELECT id, name, url FROM ' . $this->mainwp_table( 'wp' ) . " WHERE id IN ($placeholders)", $site_ids ), OBJECT_K );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- $placeholders is only a list of %d placeholders.
+		$rows = $wpdb->get_results( $wpdb->prepare( "SELECT id, name, url FROM %i WHERE id IN ($placeholders)", array_merge( array( $this->mainwp_table( 'wp' ) ), $site_ids ) ), OBJECT_K );
 		return is_array( $rows ) ? $rows : array();
 	}
 
@@ -338,10 +341,10 @@ class DB {
 			return;
 		}
 		$cutoff = Status::now() - $days * DAY_IN_SECONDS;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $this->items_table() . ' WHERE run_start < %d', $cutoff ) );
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $this->runs_table() . ' WHERE run_start < %d', $cutoff ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE run_start < %d', $this->items_table(), $cutoff ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE run_start < %d', $this->runs_table(), $cutoff ) );
 	}
 
 	/**
@@ -349,7 +352,7 @@ class DB {
 	 */
 	public function drop() {
 		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->items_table() . ', ' . $this->runs_table() );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange
+		$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i, %i', $this->items_table(), $this->runs_table() ) );
 	}
 }

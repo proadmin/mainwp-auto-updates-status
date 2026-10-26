@@ -59,10 +59,18 @@ class Widget {
 	 * @return bool
 	 */
 	public static function can_view() {
-		if ( function_exists( 'mainwp_current_user_can' ) ) {
-			$allowed = \mainwp_current_user_can( 'dashboard', 'access_global_dashboard' );
-		} else {
-			$allowed = current_user_can( 'manage_options' );
+		/**
+		 * Filters the WordPress capability required to view the Auto Updates widget and history.
+		 *
+		 * @param string $capability Capability. Default 'manage_options'.
+		 */
+		$capability = (string) apply_filters( 'mainwp_aus_capability', 'manage_options' );
+
+		// MainWP's own permission check returns true for everyone unless a team permissions add-on is active,
+		// so a WordPress capability is always required as well.
+		$allowed = current_user_can( $capability );
+		if ( $allowed && function_exists( 'mainwp_current_user_can' ) ) {
+			$allowed = (bool) \mainwp_current_user_can( 'dashboard', 'access_global_dashboard' );
 		}
 		/**
 		 * Filters whether the current user can view the Auto Updates widget and history.
