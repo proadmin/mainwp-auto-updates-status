@@ -20,6 +20,12 @@ Widget (MainWP > Operations), four views from the widget menu:
 
 The extension page (Add-ons > MainWP Auto Updates Status Extension) shows the full paginated run history, per-run details, and a history retention setting (default 90 days).
 
+== Documentation ==
+
+* docs/installation-guide.pdf - installing, enabling the widget, updating and removing.
+* docs/user-guide.pdf - using the widget and history page.
+* LICENSE.txt - the GNU General Public License, version 2.
+
 == How it works ==
 
 MainWP keeps only the latest run's results (option mainwp_updates_report_storage) and clears them when the next run starts. This extension copies each result into its own tables (wp_mainwp_aus_runs, wp_mainwp_aus_items) the moment MainWP saves it, so history builds up from activation onward. Nothing in MainWP is modified. On activation it imports the latest run's results and up to ~20 previous run start times (start times only, MainWP does not keep their details).

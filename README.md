@@ -26,7 +26,11 @@ A MainWP Dashboard extension that adds an **Auto Updates** widget to the Operati
 2. In the Dashboard site's WordPress admin, go to **Plugins → Add New Plugin → Upload Plugin**, upload the zip and activate it.
 3. Open **MainWP → Operations**. If the widget is hidden, turn on **Auto Updates Status** in Page Settings (the cog icon).
 
-See [docs/user-guide.pdf](docs/user-guide.pdf) for the full user guide.
+See the [installation guide](docs/installation-guide.pdf) and the [user guide](docs/user-guide.pdf) for full details.
+
+## Building the zip
+
+Run `bin/build-zip.sh` to create `dist/mainwp-auto-updates-status.zip`. The zip contains the plugin, `LICENSE.txt` and both guides (in `docs/`).
 
 ## How it works
 
@@ -45,4 +49,4 @@ MainWP keeps only the latest run's results (in the `mainwp_updates_report_storag
 
 Copyright (c) 2026 [ProAdmin](https://proadminwp.net/).
 
-Released under the GNU General Public License v2 or later.
+Released under the GNU General Public License v2 or later. See [LICENSE.txt](LICENSE.txt).
