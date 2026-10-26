@@ -3,7 +3,7 @@ Contributors: proadmin
 Donate link: https://proadminwp.net/
 Requires at least: 6.2
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,12 @@ Tested with MainWP Dashboard 6.3.
 * mainwp_aus_run_finished (action, $run_start, $status) - fires when a run is recorded as finished.
 
 == Changelog ==
+
+= 1.0.1 =
+* Security: all database queries now pass table names through $wpdb->prepare with %i placeholders.
+* Security: the widget and history page now require the manage_options capability as well as MainWP access.
+* New: mainwp_aus_capability filter to change the required capability.
+* Plugin zip now includes the GPL licence and the user and installation guides.
 
 = 1.0.0 =
 * Initial release.
